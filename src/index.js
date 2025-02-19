@@ -27,16 +27,16 @@ async function getUserData(id) {
     };
 
     try {
-        // Step 1: Get the database name from central
+        // Get the database name from central
         const dbName = await central(id);
 
-        // Step 2: Fetch user data from the correct database
+        // Fetch user data from the correct database
         const userBasicInfo = await dbs[dbName](id);
 
-        // Step 3: Fetch personal data from the vault
+        // Fetch personal data from the vault
         const userPersonalInfo = await vault(id);
 
-        // Step 4: Merge the data into a single object
+        // Merge the data into a single object
         return {
             id: id,
             name: userPersonalInfo.name,
@@ -53,4 +53,24 @@ async function getUserData(id) {
         throw new Error(`Error fetching user data: ${error.message}`);
     }
 }
+
+// Test functions to see if it works with different IDs
+(async () => {
+    try {
+        const result = await getUserData(7);
+        console.log(result);
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+})();
+
+// Returns error
+(async () => {
+    try {
+        const result = await getUserData(34);
+        console.log(result);
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+})();
 
