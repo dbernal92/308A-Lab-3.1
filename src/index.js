@@ -17,8 +17,6 @@ const val3 = await vault(2);
 db3(10).then(userBasicInfo => console.log(userBasicInfo))
 vault(10).then(userPersonalInfo => console.log(userPersonalInfo))
 
-
-
 async function getUserData(id) {
     // Ensures id entered is valid
     if (typeof id !== "number") throw new Error("Invalid Input -- Not a Number");
@@ -33,11 +31,18 @@ async function getUserData(id) {
         // Get the database name from central
         const dbName = await central(id);
 
-        // Fetch user data from the correct database
-        const userBasicInfo = await dbs[dbName](id);
+        // Get user data from the correct database
+        // const userBasicInfo = await dbs[dbName](id);
 
-        // Fetch personal data from the vault
-        const userPersonalInfo = await vault(id);
+        // Get personal data from the vault
+        // const userPersonalInfo = await vault(id);
+
+        const [userBasicInfo, userPersonalInfo] = await Promise.all([
+            // Get user details from correct database
+            dbs[dbName](id),
+            // Get user details from vault
+            vault(id)
+        ]);
 
         // Merge the data into a single object
         return {
@@ -52,7 +57,7 @@ async function getUserData(id) {
         };
 
     } catch (error) {
-        // Step 5: Throw an error instead of returning a rejected promise
+        // Throw an error instead of returning a rejected promise
         throw new Error(`Error fetching user data: ${error.message}`);
     }
 }
@@ -79,3 +84,4 @@ async function getUserData(id) {
 
 // Returns error based on type
 getUserData("info");
+
