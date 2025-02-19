@@ -20,6 +20,9 @@ vault(10).then(userPersonalInfo => console.log(userPersonalInfo))
 
 
 async function getUserData(id) {
+    // Ensures id entered is valid
+    if (typeof id !== "number") throw new Error("Invalid Input -- Not a Number");
+
     const dbs = {
         db1: db1,
         db2: db2,
@@ -64,7 +67,7 @@ async function getUserData(id) {
     }
 })();
 
-// Returns error
+// Returns error based on range
 (async () => {
     try {
         const result = await getUserData(34);
@@ -74,3 +77,5 @@ async function getUserData(id) {
     }
 })();
 
+// Returns error based on type
+getUserData("info");
